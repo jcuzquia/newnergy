@@ -1,0 +1,17 @@
+@(title: String, nav: String = "")(content: Html)
+
+@import be.objectify.deadbolt.java.views.html._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+		@head_section(title)        
+    </head>
+    <body>
+    	@nav_bar()
+    	<br><br>
+        @content
+    </body>
+</html>

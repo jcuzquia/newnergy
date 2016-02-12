@@ -1,0 +1,33 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET     /                           controllers.Application.index()
+GET     /assets/javascript/routes.js    controllers.Application.jsRoutes()
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+
+# Profile
+GET     /profile                    controllers.Application.profile
+
+# Sign up
+GET		/signup							controllers.Application.signup()
+POST	/signup							controllers.Application.doSignup()
+
+GET		/accounts/verify/:token			controllers.Signup.verify(token: String)
+
+GET     /accounts/verify            controllers.Account.verifyEmail()
+
+GET		/accounts/link					controllers.Account.askLink()
+
+GET		/authenticate/:provider		com.feth.play.module.pa.controllers.AuthenticateDI.authenticate(provider: String)
+
+GET		/accounts/unverified			controllers.Signup.unverified()
+GET     /authenticate/:provider/denied     controllers.Signup.oAuthDenied(provider: String)
+
+# Map static resources from the /public folder to the /assets URL path
+GET		/assets/*file				controllers.Assets.at(path="/public", file)
+GET		/vassets/*file				controllers.Assets.versioned(path="/public", file:Asset)
+GET		/webjars/*file				controllers.WebJarAssets.at(file)
