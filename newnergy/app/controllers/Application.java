@@ -16,9 +16,11 @@ import play.mvc.Controller;
 import play.mvc.Http.Session;
 import play.mvc.Result;
 import providers.MyUsernamePasswordAuthProvider;
+import providers.MyUsernamePasswordAuthProvider.MyLogin;
 import providers.MyUsernamePasswordAuthProvider.MySignup;
 import views.html.index;
-import views.html.account.signup;
+import views.html.signup;
+import views.html.account.login;
 
 public class Application extends Controller {
 
@@ -60,6 +62,7 @@ public class Application extends Controller {
 		   //Everything was filled
 		   //do something with your part of the form before handling the user
 		   //signup
+		   
 		   return UsernamePasswordAuthProvider.handleSignup(ctx());
 	   }
 	   
@@ -76,5 +79,21 @@ public class Application extends Controller {
 						controllers.routes.javascript.Signup.unverified()))
 				.as("text/javascript");
 	}
+   
+   public Result login(){
+	   return ok(views.html.account.login.render(MyUsernamePasswordAuthProvider.LOGIN_FORM));
+   }
+   
+   public Result doLogin(){
+	   com.feth.play.module.pa.controllers.Authenticate.noCache(response());
+	   final Form<MyLogin> filledForm = MyUsernamePasswordAuthProvider.LOGIN_FORM.bindFromRequest();
+	   if (filledForm.hasErrors()){
+		   // User did not fill everything properly
+		   return badRequest(login.render(filledForm));
+	   } else {
+		   System.out.println("Form is good to go, handling login with UsernamePasswordAuthProvider");
+		   return UsernamePasswordAuthProvider.handleLogin(ctx());
+	   }
+   }
 
 }

@@ -371,24 +371,23 @@ public class MyUsernamePasswordAuthProvider
 
 	protected Body getVerifyEmailMailingBodyAfterSignup(final String token,
 			final User user, final Context ctx) {
-//
-//		final boolean isSecure = getConfiguration().getBoolean(
-//				SETTING_KEY_VERIFICATION_LINK_SECURE);
-//		final String url = routes.Signup.verify(token).absoluteURL(
-//				ctx.request(), isSecure);
-//
-//		final Lang lang = Lang.preferred(ctx.request().acceptLanguages());
-//		final String langCode = lang.code();
-//
-//		final String html = getEmailTemplate(
-//				"views.html.account.email.verify_email", langCode, url, token,
-//				user.name, user.email);
-//		final String text = getEmailTemplate(
-//				"views.txt.account.email.verify_email", langCode, url, token,
-//				user.name, user.email);
-//
-//		return new Body(text, html);
-		return null;
+
+		final boolean isSecure = getConfiguration().getBoolean(
+				SETTING_KEY_VERIFICATION_LINK_SECURE);
+		final String url = routes.Signup.verify(token).absoluteURL(
+				ctx.request(), isSecure);
+
+		final Lang lang = Lang.preferred(ctx.request().acceptLanguages());
+		final String langCode = lang.code();
+
+		final String html = getEmailTemplate(
+				"views.html.account.email.verify_email", langCode, url, token,
+				user.name, user.email);
+		final String text = getEmailTemplate(
+				"views.txt.account.email.verify_email", langCode, url, token,
+				user.name, user.email);
+
+		return new Body(text, html);
 	}
 
 	public void sendVerifyEmailMailingAfterSignup(final User user,

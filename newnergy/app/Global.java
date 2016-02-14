@@ -50,8 +50,8 @@ public class Global extends GlobalSettings {
 
 			@Override
 			public Call login() {
-				// TODO Auto-generated method stub
-				return null;
+				System.out.println("We are calling login from GLOBAL");
+				return routes.Application.login();
 			}
 
 			@Override

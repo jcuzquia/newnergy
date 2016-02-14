@@ -6,10 +6,16 @@ import play.i18n.Messages;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.account.unverified;
+import views.html.account.signup.exists;
 
-public class Signup extends Controller{
+public class Signup extends Controller {
 
 	
+	/**
+	 * This is called after the user has clicked the link on his email
+	 * @param token
+	 * @return
+	 */
 	public Result verify(final String token){
 		com.feth.play.module.pa.controllers.Authenticate.noCache(response());
 		final TokenAction ta = tokenIsValid(token, Type.EMAIL_VERIFICATION);
@@ -27,7 +33,7 @@ public class Signup extends Controller{
 		if (Application.getLocalUser(session()) != null) {
 			return redirect(routes.Application.index());
 		} else {
-			return TODO;
+			return redirect(routes.Application.login());
 		}
 		
 	}
@@ -57,5 +63,10 @@ public class Signup extends Controller{
 	public Result unverified() {
 		com.feth.play.module.pa.controllers.Authenticate.noCache(response());
 		return ok(unverified.render());
+	}
+	
+	public Result exists(){
+		com.feth.play.module.pa.controllers.Authenticate.noCache(response());
+		return ok(exists.render());
 	}
 }
