@@ -17,6 +17,7 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 
 # Profile
 GET     /profile                    controllers.Application.profile()
+GET		/dashboard					controllers.Application.dashboard()
 
 GET		/login						controllers.Application.login()
 POST	/login						controllers.Application.doLogin()

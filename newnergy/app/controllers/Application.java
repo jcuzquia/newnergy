@@ -1,5 +1,6 @@
 package controllers;
 
+import java.awt.image.renderable.RenderableImage;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -24,6 +25,8 @@ import views.html.signup;
 import views.html.about;
 import views.html.contact;
 import views.html.account.login;
+import views.html.dashboard;
+import views.html.profile;
 
 public class Application extends Controller {
 
@@ -38,7 +41,9 @@ public class Application extends Controller {
     
     @Restrict(@Group(Application.USER_ROLE))
     public Result profile(){
-    	return TODO;
+    	final AuthUser currentAuthUser = PlayAuthenticate.getUser(session());
+    	final User localUser = User.findByAuthUserIdentity(currentAuthUser);
+    	return ok(profile.render(localUser));
     }
     
     public Result about(){
@@ -54,11 +59,17 @@ public class Application extends Controller {
 	   return ok(signup.render(MyUsernamePasswordAuthProvider.SIGNUP_FORM));
    }
    
-   @Restrict(@Group(Application.USER_ROLE))
    public static User getLocalUser(final Session session){
 	   final AuthUser currentAuthUser = PlayAuthenticate.getUser(session);
 	   final User localUser = User.findByAuthUserIdentity(currentAuthUser);
 	   return localUser;
+   }
+   
+   @Restrict(@Group(Application.USER_ROLE))
+   public Result dashboard(){
+	final AuthUser currentAuthUser = PlayAuthenticate.getUser(session());
+	final User localUser = User.findByAuthUserIdentity(currentAuthUser);
+	return ok(dashboard.render(localUser, Const.NAV_DASHBOARD));
    }
    
    
@@ -78,6 +89,8 @@ public class Application extends Controller {
 	   }
 	   
    }
+   
+   
     
    public static String formatTimestamp(final long t) {
 		return new SimpleDateFormat("yyyy-dd-MM HH:mm:ss").format(new Date(t));
