@@ -10,8 +10,10 @@
 		@head_section(title)        
     </head>
     <body>
-    <br><br><br><br>
-    	@nav_bar()
+   
+    	@nav_bar(nav)
+    	 <br><br><br><br>
+    	
     	
     	@if(flash.contains(Application.FLASH_ERROR_KEY)) {
     		<div class="alert alert-danger" role="alert">

@@ -9,6 +9,7 @@ import com.feth.play.module.pa.user.AuthUser;
 
 import be.objectify.deadbolt.java.actions.Group;
 import be.objectify.deadbolt.java.actions.Restrict;
+import constants.Const;
 import models.User;
 import play.Routes;
 import play.data.Form;
@@ -20,6 +21,8 @@ import providers.MyUsernamePasswordAuthProvider.MyLogin;
 import providers.MyUsernamePasswordAuthProvider.MySignup;
 import views.html.index;
 import views.html.signup;
+import views.html.about;
+import views.html.contact;
 import views.html.account.login;
 
 public class Application extends Controller {
@@ -30,12 +33,20 @@ public class Application extends Controller {
 	
 	
     public Result index() {
-        return ok(index.render("Your Newnergy"));
+        return ok(index.render(Const.NAV_HOME));
     }
     
     @Restrict(@Group(Application.USER_ROLE))
     public Result profile(){
     	return TODO;
+    }
+    
+    public Result about(){
+    	return ok(about.render(Const.NAV_ABOUT));
+    }
+    
+    public Result contact() {
+    	return ok(contact.render(Const.NAV_CONTACT));
     }
     
     

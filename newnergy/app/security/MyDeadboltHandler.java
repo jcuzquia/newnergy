@@ -3,8 +3,12 @@ package security;
 import java.util.Optional;
 
 import com.feth.play.module.pa.PlayAuthenticate;
+import com.feth.play.module.pa.user.AuthUserIdentity;
 
+import be.objectify.deadbolt.core.models.Subject;
 import be.objectify.deadbolt.java.AbstractDeadboltHandler;
+import be.objectify.deadbolt.java.DynamicResourceHandler;
+import models.User;
 import play.libs.F;
 import play.libs.F.Promise;
 import play.mvc.Http.Context;
@@ -40,5 +44,33 @@ public class MyDeadboltHandler extends AbstractDeadboltHandler {
 		
 	}
 
+	@Override
+	public Promise<Optional<DynamicResourceHandler>> getDynamicResourceHandler(Context context) {
+		// TODO Auto-generated method stub
+		return super.getDynamicResourceHandler(context);
+	}
+
+	@Override
+	public Promise<Optional<Subject>> getSubject(final Context context) {
+		final AuthUserIdentity u = PlayAuthenticate.getUser(context);
+		return F.Promise.pure(Optional.ofNullable((Subject) User.findByAuthUserIdentity(u)));
+	}
+
+	@Override
+	public Promise<Result> onAuthFailure(Context context, String content) {
+		// if the user has a cookie with a valid user and the local user has
+		// been deactivated/deleted in between, it is possible that this gets
+		// shown. You might want to consider to sign the user out in this case.
+		return F.Promise.promise(new F.Function0<Result>() {
+
+			@Override
+			public Result apply() throws Throwable {
+				// TODO Auto-generated method stub
+				return forbidden("Forbidden");
+			}
+		});
+	}
+
+	
 
 }
