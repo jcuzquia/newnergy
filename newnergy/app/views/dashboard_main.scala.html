@@ -1,6 +1,5 @@
-@(localUser: User)(nav: String)
+@(localUser: User)(nav: String)(controller: => Html)
 @import views.html.commons._
-@import views.html.dashboard._
 
 @main("Dashboard", nav) {
 
@@ -15,7 +14,7 @@
 	 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 	 	<div class="tab-content">
 	 		<div id="my-meter" class="tab-pane fade in active">
-	 			@controller("Controller")
+	 			@controller
 	 		</div>
 	 	
 		 	<div class="tab-pane fade" id="other">

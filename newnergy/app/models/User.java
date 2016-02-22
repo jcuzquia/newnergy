@@ -71,6 +71,7 @@ public class User extends AppModel implements Subject {
 
 	public static final Finder<Long, User> find = new Model.Finder<Long, User>(User.class);
 
+	
 	public User(){}
 	
 	@Override
@@ -168,8 +169,6 @@ public class User extends AppModel implements Subject {
 			}
 		}
 
-		System.out.println("############################");
-		System.out.println("Saving USER!!!!");
 		user.save();
 		// Ebean.saveManyToManyAssociations(user, "roles");
 		// Ebean.saveManyToManyAssociations(user, "permissions");

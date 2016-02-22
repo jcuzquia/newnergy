@@ -1,5 +1,6 @@
 package models;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -83,6 +84,28 @@ public class Data implements Comparable<Data>{
 	@Override
 	public String toString() {
 		return "IntervalData [kW=" + kW + ", dateValue=" + dateValue + "]";
+	}
+	
+	public String getDateString(){
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String output = sdf.format(date);
+		return output;
+	}
+	
+	public float getTime(){
+		@SuppressWarnings("deprecation")
+		float hour = date.getHours();
+		float minute = date.getMinutes();
+		if (minute == 0){
+			minute = 0;
+		} else if(minute == 15){
+			minute = 0.25f;
+		} else if (minute == 30){
+			minute = 0.5f;
+		} else if (minute == 45) {
+			minute = 0.75f;
+		}
+		return (hour+minute);
 	}
 
 	public Date getDate() {

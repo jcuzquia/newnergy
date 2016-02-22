@@ -19,8 +19,10 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 GET     /profile                    controllers.Application.profile()
 
 # Dashboard
-GET		/dashboard					controllers.Application.dashboard()
-POST	/upload						controllers.DashboardController.uploadMeter()
+GET		/dashboard					controllers.Application.dashboard(mode : String)
+POST	/upload/:mode				controllers.DashboardController.getMeterData(mode: String)
+# Javascript Routes for AJAX call
+GET		/jsDashboardRoutes			controllers.DashboardController.jsDashboardRoutes()
 
 GET		/login						controllers.Application.login()
 POST	/login						controllers.Application.doLogin()

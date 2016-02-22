@@ -1,8 +1,10 @@
 package controllers;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.providers.password.UsernamePasswordAuthProvider;
@@ -11,12 +13,12 @@ import com.feth.play.module.pa.user.AuthUser;
 import be.objectify.deadbolt.java.actions.Group;
 import be.objectify.deadbolt.java.actions.Restrict;
 import constants.Const;
+import models.Data;
 import models.User;
 import play.Routes;
 import play.data.Form;
+import play.libs.Json;
 import play.mvc.Controller;
-import play.mvc.Http.MultipartFormData;
-import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Http.Session;
 import play.mvc.Result;
 import providers.MyUsernamePasswordAuthProvider;
@@ -29,6 +31,7 @@ import views.html.index;
 import views.html.profile;
 import views.html.signup;
 import views.html.account.login;
+import views.html.dashboard.controller;
 
 public class Application extends Controller {
 
@@ -66,10 +69,13 @@ public class Application extends Controller {
 	}
 
 	@Restrict(@Group(Application.USER_ROLE))
-	public Result dashboard() {
+	public Result dashboard(String mode) {
+		
 		final AuthUser currentAuthUser = PlayAuthenticate.getUser(session());
 		final User localUser = User.findByAuthUserIdentity(currentAuthUser);
-		return ok(dashboard_main.render(localUser, Const.NAV_DASHBOARD));
+		
+		return ok(dashboard_main.render(localUser, Const.NAV_DASHBOARD, controller.render("Controller",null)));
+		
 	}
 
 	public Result doSignup() {

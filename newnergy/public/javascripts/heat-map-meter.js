@@ -103,8 +103,8 @@ $(function () {
 
         xAxis: {
             type: 'datetime',
-            min: Date.UTC(2013, 0, 1),
-            max: Date.UTC(2014, 0, 1),
+            min: Date.UTC(2011, 9, 25),
+            max: Date.UTC(2014, 11, 30),
             labels: {
                 align: 'left',
                 x: 5,
@@ -140,8 +140,8 @@ $(function () {
                 [0.9, '#c4463a'],
                 [1, '#c4463a']
             ],
-            min: -15,
-            max: 25,
+            min: 0,
+            max: 53,
             startOnTick: false,
             endOnTick: false,
             labels: {

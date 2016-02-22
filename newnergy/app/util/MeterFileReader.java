@@ -14,12 +14,17 @@ import java.util.TimeZone;
 
 import models.Data;
 
+/**
+ * Object that reads cvs files
+ * @author Jose Camilo Uzquiano
+ *
+ */
 public class MeterFileReader {
 
 	public MeterFileReader() {
 	}
 	
-	public static List<Data> readFile(File file){
+	public static List<Data> getDataListFromFile(File file){
 		List<Data> dataList = new ArrayList<Data>();
 		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
 			// //////////reading the first line//////////
@@ -29,7 +34,6 @@ public class MeterFileReader {
 			while ((line = bufferedReader.readLine()) != null) {
 				Data data = createData(line);
 				dataList.add(data);
-				System.out.println(line);
 			}
 		}catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -38,6 +42,7 @@ public class MeterFileReader {
 		}
 		Collections.sort(dataList);
 
+		System.out.println("Data sorted!");
 		return dataList;
 	}
 	
@@ -54,7 +59,6 @@ public class MeterFileReader {
 		String dateTokens = dataTokens[4];
 		String year = dateTokens.substring(0, 4);
 		String month = dateTokens.substring(4, 6);
-		System.out.println(dateTokens);
 		
 		short y = Short.parseShort(year);
 		short m = 0;
