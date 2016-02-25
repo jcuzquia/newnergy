@@ -21,8 +21,11 @@ GET     /profile                    controllers.Application.profile()
 # Dashboard
 GET		/dashboard					controllers.Application.dashboard(mode : String)
 POST	/upload/:mode				controllers.DashboardController.getMeterData(mode: String)
+GET		/dashboard/addProject		controllers.ProjectController.addProject()
+POST	/dashboard/saveProject		controllers.ProjectController.saveProject()
 # Javascript Routes for AJAX call
 GET		/jsDashboardRoutes			controllers.DashboardController.jsDashboardRoutes()
+
 
 GET		/login						controllers.Application.login()
 POST	/login						controllers.Application.doLogin()

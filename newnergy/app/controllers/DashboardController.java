@@ -8,6 +8,7 @@ import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUser;
 
 import models.Data;
+import models.Project;
 import models.User;
 import play.Routes;
 import play.libs.Json;
@@ -19,6 +20,7 @@ import play.mvc.Result;
 import util.MeterFileReader;
 import views.html.dashboard_main;
 import views.html.dashboard.controller;
+import views.html.dashboard.my_projects;
 
 public class DashboardController extends Controller {
 
@@ -31,8 +33,6 @@ public class DashboardController extends Controller {
 	 * @return
 	 */
 	public Result getMeterData(String mode) {
-		System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-		System.out.println("We are done with the dataList");
 		
 		MultipartFormData body = request().body().asMultipartFormData();
 		FilePart filePart = body.getFile("meter_data");
@@ -45,7 +45,10 @@ public class DashboardController extends Controller {
 			
 			flash("Message", "Upload Successful");
 			
-			return ok(dashboard_main.render(localUser, "", controller.render("Controller", dataList)));
+			return ok(dashboard_main.render(localUser, 
+					"", 
+					controller.render("Controller", dataList),
+					my_projects.render(Project.findAllByUser(localUser.email))));
 			
 		} else {
 			flash ("Error", "failed uploading file");

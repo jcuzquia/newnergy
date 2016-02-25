@@ -39,6 +39,7 @@
   background-color: #428bca;
 }
 
+
 /*
  * Main content
  */
@@ -75,3 +76,11 @@
   display: inline-block;
   border-radius: 50%;
 }
+
+/*
+ * Title
+ */
+ 
+ .p {
+ 	margin-left: 200px;
+ }

@@ -1,0 +1,10 @@
+@(projectsList: List[models.Project])
+
+<h1 class="page-header">My Projects</h1>
+
+@if(projectsList.isEmpty) {
+	<h2>You don't have any projects yet</h2>
+	<button class="btn btn-primary" onclick="window.location='@routes.ProjectController.addProject()';">Create Project</button>
+} else {
+	<h1>Show projects</h1>
+}

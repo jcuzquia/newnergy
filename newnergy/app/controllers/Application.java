@@ -14,6 +14,7 @@ import be.objectify.deadbolt.java.actions.Group;
 import be.objectify.deadbolt.java.actions.Restrict;
 import constants.Const;
 import models.Data;
+import models.Project;
 import models.User;
 import play.Routes;
 import play.data.Form;
@@ -32,6 +33,7 @@ import views.html.profile;
 import views.html.signup;
 import views.html.account.login;
 import views.html.dashboard.controller;
+import views.html.dashboard.my_projects;
 
 public class Application extends Controller {
 
@@ -73,8 +75,14 @@ public class Application extends Controller {
 		
 		final AuthUser currentAuthUser = PlayAuthenticate.getUser(session());
 		final User localUser = User.findByAuthUserIdentity(currentAuthUser);
+		List<Project> projects = Project.findAllByUser(localUser.email);
 		
-		return ok(dashboard_main.render(localUser, Const.NAV_DASHBOARD, controller.render("Controller",null)));
+		return ok(dashboard_main.render(localUser, 
+				Const.NAV_DASHBOARD, 
+				controller.render("Controller",null),
+				my_projects.render(projects)
+					)
+				);
 		
 	}
 

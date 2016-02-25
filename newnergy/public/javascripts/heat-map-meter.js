@@ -126,11 +126,11 @@ $(function () {
             maxPadding: 0,
             startOnTick: false,
             endOnTick: false,
-            tickPositions: [0, 6, 12, 18, 24],
+            tickPositions: [24, 18, 12, 6, 0],
             tickWidth: 1,
             min: 0,
             max: 23,
-            reversed: true
+            reversed: false
         },
 
         colorAxis: {
