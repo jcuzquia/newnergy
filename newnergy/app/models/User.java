@@ -70,11 +70,9 @@ public class User extends AppModel implements Subject {
 	@ManyToMany
 	public List<UserPermission> permissions;
 	
-	@ManyToMany(cascade = CascadeType.REMOVE)
-	public List<Meter> meters = new ArrayList<Meter>();
-
-	@OneToMany
-	public List<Project> project = new ArrayList<Project>();
+	//Project related
+	@OneToMany(cascade = CascadeType.ALL)
+	public List<Project> projects = new ArrayList<Project>();
 	
 	public static final Finder<Long, User> find = new Model.Finder<Long, User>(User.class);
 

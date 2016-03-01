@@ -1,28 +1,28 @@
-@(projectForm : Form[_])
+@(meterForm : Form[_])(project: models.Project)
 @import views.html.commons._
 @implicitFieldConstructor = @{ b3.horizontal.fieldConstructor("col-md-2", "col-md-8") }
 @shortFC = @{ b3.horizontal.fieldConstructor("col-md-2", "col-md-4") }
-
-@main("Project Form"){
+@main("Add Meter"){
 <div class="container">
   <div class="page-header">
-		<h1>Project Information</h1>
+		<h1>Meter Information</h1>
   </div>
-
   <fieldset>
-  	<legend>User Information</legend>
-	@b3.form(action = routes.ProjectController.saveProject()) {
-		@b3.text(projectForm("title"), 
-			'_label -> "Title",
-			'value -> "Project X"
+	@b3.form(action = routes.ProjectController.getMeterData("kWh", project.id), 'enctype -> "multipart/form-data") {
+		@b3.text(meterForm("meter"), 
+			'_label -> "meter",
+			'value -> "Meter X"
 		)(shortFC, implicitly[Messages])
 		
-	@b3.text(projectForm("description"), 
+	@b3.text(meterForm("description"), 
 			'_label -> "Description",
-			'value -> "Project X description"
+			'value -> "Meter X description"
 		)(shortFC, implicitly[Messages])
-		
-        
+	
+	@b3.file(meterForm("meter_data"), '_label -> "file")
+    
+    
+	
        <div class="form-group">
         <div class="col-md-4">
           <input type="submit" class="btn btn-success" value="Submit"/>
@@ -30,12 +30,11 @@
                    value="cancel">Cancel</button>
         </div>
       </div>
+      
+	
+      
 	}
   </fieldset>
-  <div class="col-xs-6 col-md-4">
-  	@*Display list of available providers
-  	@_providerPartial(skipCurrent=false)*@
-  </div>
   
   </div>	
 }

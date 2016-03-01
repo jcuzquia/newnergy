@@ -13,13 +13,17 @@ create table linked_account (
 
 create table meter (
   id                        bigint not null,
+  project_id                bigint,
+  meter_name                varchar(255),
   description               varchar(255),
+  start_date                timestamp,
+  end_date                  timestamp,
   constraint pk_meter primary key (id))
 ;
 
 create table project (
-  id                        varchar(255) not null,
-  owner_id                  bigint,
+  id                        bigint not null,
+  user_id                   bigint not null,
   title                     varchar(255),
   description               varchar(255),
   constraint pk_project primary key (id))
@@ -62,10 +66,10 @@ create table user_permission (
 ;
 
 
-create table meter_users (
-  meter_id                       bigint not null,
+create table project_users (
+  project_id                     bigint not null,
   users_id                       bigint not null,
-  constraint pk_meter_users primary key (meter_id, users_id))
+  constraint pk_project_users primary key (project_id, users_id))
 ;
 
 create table users_security_role (
@@ -78,12 +82,6 @@ create table users_user_permission (
   users_id                       bigint not null,
   user_permission_id             bigint not null,
   constraint pk_users_user_permission primary key (users_id, user_permission_id))
-;
-
-create table users_meter (
-  users_id                       bigint not null,
-  meter_id                       bigint not null,
-  constraint pk_users_meter primary key (users_id, meter_id))
 ;
 create sequence linked_account_seq;
 
@@ -101,16 +99,18 @@ create sequence user_permission_seq;
 
 alter table linked_account add constraint fk_linked_account_user_1 foreign key (user_id) references users (id) on delete restrict on update restrict;
 create index ix_linked_account_user_1 on linked_account (user_id);
-alter table project add constraint fk_project_owner_2 foreign key (owner_id) references users (id) on delete restrict on update restrict;
-create index ix_project_owner_2 on project (owner_id);
-alter table token_action add constraint fk_token_action_targetUser_3 foreign key (target_user_id) references users (id) on delete restrict on update restrict;
-create index ix_token_action_targetUser_3 on token_action (target_user_id);
+alter table meter add constraint fk_meter_project_2 foreign key (project_id) references project (id) on delete restrict on update restrict;
+create index ix_meter_project_2 on meter (project_id);
+alter table project add constraint fk_project_users_3 foreign key (user_id) references users (id) on delete restrict on update restrict;
+create index ix_project_users_3 on project (user_id);
+alter table token_action add constraint fk_token_action_targetUser_4 foreign key (target_user_id) references users (id) on delete restrict on update restrict;
+create index ix_token_action_targetUser_4 on token_action (target_user_id);
 
 
 
-alter table meter_users add constraint fk_meter_users_meter_01 foreign key (meter_id) references meter (id) on delete restrict on update restrict;
+alter table project_users add constraint fk_project_users_project_01 foreign key (project_id) references project (id) on delete restrict on update restrict;
 
-alter table meter_users add constraint fk_meter_users_users_02 foreign key (users_id) references users (id) on delete restrict on update restrict;
+alter table project_users add constraint fk_project_users_users_02 foreign key (users_id) references users (id) on delete restrict on update restrict;
 
 alter table users_security_role add constraint fk_users_security_role_users_01 foreign key (users_id) references users (id) on delete restrict on update restrict;
 
@@ -120,10 +120,6 @@ alter table users_user_permission add constraint fk_users_user_permission_user_0
 
 alter table users_user_permission add constraint fk_users_user_permission_user_02 foreign key (user_permission_id) references user_permission (id) on delete restrict on update restrict;
 
-alter table users_meter add constraint fk_users_meter_users_01 foreign key (users_id) references users (id) on delete restrict on update restrict;
-
-alter table users_meter add constraint fk_users_meter_meter_02 foreign key (meter_id) references meter (id) on delete restrict on update restrict;
-
 # --- !Downs
 
 SET REFERENTIAL_INTEGRITY FALSE;
@@ -132,9 +128,9 @@ drop table if exists linked_account;
 
 drop table if exists meter;
 
-drop table if exists meter_users;
-
 drop table if exists project;
+
+drop table if exists project_users;
 
 drop table if exists security_role;
 
@@ -145,8 +141,6 @@ drop table if exists users;
 drop table if exists users_security_role;
 
 drop table if exists users_user_permission;
-
-drop table if exists users_meter;
 
 drop table if exists user_permission;
 
