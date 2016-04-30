@@ -3,6 +3,25 @@
 
 # --- !Ups
 
+create table data (
+  id                        bigint not null,
+  k_wh                      float,
+  cost                      float,
+  k_w                       float,
+  genk_w                    float,
+  genk_wh                   float,
+  k_varh                    float,
+  k_var                     float,
+  julian_day                smallint,
+  is_start_day              boolean,
+  is_end_day                boolean,
+  date                      timestamp,
+  date_value                bigint,
+  daytype                   varchar(255),
+  meter_id                  bigint,
+  constraint pk_data primary key (id))
+;
+
 create table linked_account (
   id                        bigint not null,
   user_id                   bigint,
@@ -83,6 +102,8 @@ create table users_user_permission (
   user_permission_id             bigint not null,
   constraint pk_users_user_permission primary key (users_id, user_permission_id))
 ;
+create sequence data_seq;
+
 create sequence linked_account_seq;
 
 create sequence meter_seq;
@@ -97,14 +118,16 @@ create sequence users_seq;
 
 create sequence user_permission_seq;
 
-alter table linked_account add constraint fk_linked_account_user_1 foreign key (user_id) references users (id) on delete restrict on update restrict;
-create index ix_linked_account_user_1 on linked_account (user_id);
-alter table meter add constraint fk_meter_project_2 foreign key (project_id) references project (id) on delete restrict on update restrict;
-create index ix_meter_project_2 on meter (project_id);
-alter table project add constraint fk_project_users_3 foreign key (user_id) references users (id) on delete restrict on update restrict;
-create index ix_project_users_3 on project (user_id);
-alter table token_action add constraint fk_token_action_targetUser_4 foreign key (target_user_id) references users (id) on delete restrict on update restrict;
-create index ix_token_action_targetUser_4 on token_action (target_user_id);
+alter table data add constraint fk_data_meter_1 foreign key (meter_id) references meter (id) on delete restrict on update restrict;
+create index ix_data_meter_1 on data (meter_id);
+alter table linked_account add constraint fk_linked_account_user_2 foreign key (user_id) references users (id) on delete restrict on update restrict;
+create index ix_linked_account_user_2 on linked_account (user_id);
+alter table meter add constraint fk_meter_project_3 foreign key (project_id) references project (id) on delete restrict on update restrict;
+create index ix_meter_project_3 on meter (project_id);
+alter table project add constraint fk_project_users_4 foreign key (user_id) references users (id) on delete restrict on update restrict;
+create index ix_project_users_4 on project (user_id);
+alter table token_action add constraint fk_token_action_targetUser_5 foreign key (target_user_id) references users (id) on delete restrict on update restrict;
+create index ix_token_action_targetUser_5 on token_action (target_user_id);
 
 
 
@@ -123,6 +146,8 @@ alter table users_user_permission add constraint fk_users_user_permission_user_0
 # --- !Downs
 
 SET REFERENTIAL_INTEGRITY FALSE;
+
+drop table if exists data;
 
 drop table if exists linked_account;
 
@@ -145,6 +170,8 @@ drop table if exists users_user_permission;
 drop table if exists user_permission;
 
 SET REFERENTIAL_INTEGRITY TRUE;
+
+drop sequence if exists data_seq;
 
 drop sequence if exists linked_account_seq;
 

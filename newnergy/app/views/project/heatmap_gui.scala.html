@@ -1,4 +1,4 @@
-@(title : String)(dataList: List[models.Data])
+@(title : String)(meter : Meter)
 
 @import views.html.helper._
 
@@ -26,16 +26,8 @@
 }
 
 <div id="hc-container" style="min-width: 1000px; max-width: 1000px; height: 400px; margin: 0 auto"></div>
+<pre id="heatmap-data">
+Date,Time,Temperature
 
-<script type="text/javascript" charset="utf-8">
-	function updateData(){
-		alert("Bolivia dice no!");
-	}
-</script>
 
-<!-- Source: http://vikjavev.no/ver/highcharts-demos/heatmap.csv.php?year=2013 -->
-<pre id="csv" style="display: none">Date,Time,Temperature
-@if(dataList == null){
-2013-01-01,0,0}else{@for(data <- dataList){
-@data.getDateString(),@data.getTime(),@data.getKWh()}</pre>
-}
+</pre>

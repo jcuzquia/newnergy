@@ -5,6 +5,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
+import com.avaje.ebean.Model;
+
 import javafx.beans.property.StringProperty;
 
 /**
@@ -13,8 +19,11 @@ import javafx.beans.property.StringProperty;
  * @author Jose Camilo Uzquiano
  *
  */
-public class Data implements Comparable<Data>{
+@Entity
+public class Data extends Model implements Comparable<Data>{
 
+	@Id
+	public Long id;
 	private float kWh, cost, kW, genkW, genkWh, kVarh, kVar;
 	private short julianDay;
 	private boolean isStartDay, isEndDay;
@@ -22,6 +31,9 @@ public class Data implements Comparable<Data>{
 	private long dateValue;
 	private StringProperty meterNumber;
 	private String daytype;
+	
+	@ManyToOne
+	public Meter meter;
 	
 	public Data(long dateValue) {
 		this.dateValue = dateValue;

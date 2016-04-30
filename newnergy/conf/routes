@@ -30,7 +30,8 @@ GET		/projectInfo/:id			controllers.ProjectController.showProject(id: Long)
 DELETE	/project/:id				controllers.ProjectController.deleteProject(id: Long)
 GET		/project/meter/:id			controllers.ProjectController.showMeterHeatMap(id: Long)
 GET		/project/addMeter			controllers.ProjectController.addMeter(projectId: Long)
-POST	/upload/:mode				controllers.ProjectController.getMeterData(mode: String, projectId: Long)
+GET		/project/heatmap/:meterId		controllers.ProjectController.retrieveHeatmapData(meterId: Long)
+POST	/project/uploadMeter/:mode				controllers.ProjectController.getMeterData(mode: String, projectId: Long)
 DELETE	/project/deleteMeter/:id	controllers.ProjectController.deleteMeter(id: Long)
 
 # Javascript Routes for AJAX call

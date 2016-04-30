@@ -9,7 +9,7 @@
   </div>
   <fieldset>
 	@b3.form(action = routes.ProjectController.getMeterData("kWh", project.id), 'enctype -> "multipart/form-data") {
-		@b3.text(meterForm("meter"), 
+		@b3.text(meterForm("meterName"), 
 			'_label -> "meter",
 			'value -> "Meter X"
 		)(shortFC, implicitly[Messages])
@@ -20,9 +20,6 @@
 		)(shortFC, implicitly[Messages])
 	
 	@b3.file(meterForm("meter_data"), '_label -> "file")
-    
-    
-	
        <div class="form-group">
         <div class="col-md-4">
           <input type="submit" class="btn btn-success" value="Submit"/>

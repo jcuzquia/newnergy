@@ -6,9 +6,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.avaje.ebean.Model;
@@ -38,7 +41,8 @@ public class Meter extends Model {
 	
 	private Date startDate, endDate;
 	
-	private List<Data> dataList = new ArrayList<Data>();
+	@OneToMany(mappedBy = "meter", cascade=CascadeType.ALL)
+	public List<Data> dataList = new ArrayList<Data>();
 	
 	public static final Finder<Long, Meter> find = new Model.Finder<Long, Meter>(Meter.class);
 
@@ -161,6 +165,20 @@ public class Meter extends Model {
 		return dataList;
 	}
 	
+	public List<String> retrieveHeatMapDataList(){
+		List<Data> meterData = dataList;
+		List<String> stringDataList = new ArrayList<String>();
+		
+		for(int i = 0; i < meterData.size()-1; i++){
+			String date = meterData.get(i).getDateString();
+			String time = Float.toString(meterData.get(i).getTime());
+			String kWh = Float.toString(meterData.get(i).getKWh());
+			String data = date + "," + time + "," + kWh;
+			stringDataList.add(data);
+		}
+		return stringDataList;
+	}
+	
 	
 	public Date getStartDate() {
 		return startDate;
@@ -178,6 +196,11 @@ public class Meter extends Model {
 		this.endDate = endDate;
 	}
 
+	@Override
+	public String toString() {
+		return "Meter [id=" + id + ", meterName=" + meterName + ", description=" + description + "]";
+	}
+	
 	public List<Data> getDataList() {
 		return dataList;
 	}
@@ -186,4 +209,5 @@ public class Meter extends Model {
 		this.dataList = dataList;
 	}
 
+	
 }

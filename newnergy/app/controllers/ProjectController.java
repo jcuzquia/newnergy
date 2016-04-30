@@ -18,19 +18,25 @@ import models.ProjectForm;
 import models.User;
 import play.Routes;
 import play.data.Form;
+import play.libs.Json;
 import play.mvc.Controller;
-import play.mvc.Result;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
+import play.mvc.Result;
+import play.twirl.api.Html;
 import util.MeterFileReader;
 import views.html.dashboard_main;
-import views.html.dashboard.controller;
-import views.html.dashboard.my_projects;
 import views.html.dashboard.project_info;
-import views.html.project.project_page;
+import views.html.project.heatmap_gui;
 import views.html.project.meter_info;
 import views.html.project.meter_list;
+import views.html.project.project_page;
 
+/**
+ * Controls the project page
+ * @author Camilo Uzquiano
+ *
+ */
 public class ProjectController extends Controller {
 
 	private static final Form<ProjectForm> PROJECT_FORM = Form.form(ProjectForm.class);
@@ -48,28 +54,40 @@ public class ProjectController extends Controller {
 	/**
 	 *  Show project page. This project page has my meter_list,
 	 *  Has the Charts Page
-	 * @param id
+	 * @param id of the project
 	 * @return
 	 */
 	@Restrict(@Group(Application.USER_ROLE))
 	public Result showProject(Long id){
+		System.out.println("======================");
+		System.out.println("ID PASSED: " + id);
 		Project project = Project.findById(id);
+		
 		if(project != null){
-			return ok(project_page.render(project,
-					Const.MY_METERS, 
-					meter_list.render(project)));
+			Html meterListPage = meter_list.render(project);
+			Html heatmapGui = heatmap_gui.render("", project);
+			Html projectPage = project_page.render(project, Const.MY_METERS, meterListPage, heatmapGui);
+			return ok(projectPage);
 		} else {
 			return badRequest();
 		}
 		
 	}
 	
+	/**
+	 * Shows the form that will be used to add a project
+	 * @return
+	 */
 	@Restrict(@Group(Application.USER_ROLE))
 	public Result addProject(){
 		
 		return ok(project_info.render(PROJECT_FORM));
 	}
 	
+	/**
+	 * Sends the request to save the new project into the database
+	 * @return
+	 */
 	public Result saveProject(){
 		Form<ProjectForm> projectForm = Form.form(ProjectForm.class).bindFromRequest();
 		final AuthUser currentAuthUser = PlayAuthenticate.getUser(session());
@@ -107,32 +125,39 @@ public class ProjectController extends Controller {
 	 */
 	public Result getMeterData(String mode, Long projectId) {
 		
+		//working with the form
+		Form<Meter> meterForm = Form.form(Meter.class).bindFromRequest();
+		if(meterForm.hasErrors()){
+			flash("Error", "The meter form has errors");
+			return badRequest("Meter Form has errors");
+		}
+		
+		Meter meter = meterForm.get();
+		
 		MultipartFormData body = request().body().asMultipartFormData();
 		FilePart filePart = body.getFile("meter_data");
 
-		final Project project = Project.findById(projectId);
+		Project project = Project.findById(projectId);
 		
 		List<Data> dataList = new ArrayList<Data>();
 		if(filePart != null) {
 			
 			File file = filePart.getFile();
 			dataList = MeterFileReader.getDataListFromFile(file);
-			
 			//if data list is not empty then create a meter instance
+			System.out.println("XXXXXXXXXXXXXX" + dataList.size());
 			if(!dataList.isEmpty()){
-				Meter meter = new Meter(dataList, project);
-				
+				meter.setDataList(dataList);
 				project.addMeter(meter);
+				project.update();
 				meter.save();
 			}
-						
 			flash("Message", "Upload Successful");
-			
 			return redirect(routes.ProjectController.showProject(project.id));
 			
 		} else {
 			flash ("Error", "failed uploading file");
-			return redirect(routes.ProjectController.addMeter(projectId));
+			return redirect(routes.ProjectController.showProject(projectId));
 		}
 		
 	}
@@ -140,10 +165,12 @@ public class ProjectController extends Controller {
 	public Result showMeterHeatMap(Long id){
 		Meter meter = Meter.findById(id);
 		Project project = meter.project;
-		return ok(project_page.render(project, 
-				Const.METER_HEAT_MAP,
-				meter_list.render(project)));
+		Html meterListPage = meter_list.render(project);
+		Html heatmapGui = heatmap_gui.render("",project);
+		Html projectPage = project_page.render(project, Const.METER_HEAT_MAP, meterListPage, heatmapGui);
+		return ok(projectPage);
 	}
+	
 	public Result addMeter(Long projectId){
 		Project project = Project.findById(projectId);
 		return ok(meter_info.render(METER_FORM, project));
@@ -154,7 +181,15 @@ public class ProjectController extends Controller {
 		return ok(
 				Routes.javascriptRouter("jsProjectRoutes", 
 				// Routes
-				routes.javascript.ProjectController.getMeterData()));
+				routes.javascript.ProjectController.getMeterData(),
+				routes.javascript.ProjectController.retrieveHeatmapData()));
+	}
+	
+	public Result retrieveHeatmapData(Long id){
+		Meter meter = Meter.findById(id);
+		Long projectId = meter.project.id;
+		
+		return redirect(routes.ProjectController.showProject(projectId));
 	}
 	
 	

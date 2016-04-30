@@ -24,7 +24,7 @@ public class Project extends Model {
 	@ManyToMany(cascade=CascadeType.ALL)
 	public List<User> members = new ArrayList<User>();
 	
-	@OneToMany(cascade=CascadeType.REMOVE)
+	@OneToMany(cascade=CascadeType.PERSIST)
 	public List<Meter> meters = new ArrayList<Meter>();
 
 	@Constraints.Required(message = "required.message")

@@ -8,13 +8,13 @@ public class MeterForm {
 	public String meterName;
 	
 	public String description;
-
-	public String getTitle() {
+	
+	public String getMeterName() {
 		return meterName;
 	}
 
-	public void setTitle(String title) {
-		this.meterName = title;
+	public void setMeterName(String meterName) {
+		this.meterName = meterName;
 	}
 
 	public String getDescription() {

@@ -1,8 +1,6 @@
 @(project: models.Project)
 @import views.html.helper._
 
-
-	
 @if(project.meters.isEmpty()){
 <div class="panel panel-default">
 <table class="table table-striped table-bordered">
@@ -56,9 +54,7 @@
 			</tbody>
 		</table>
 		}
-			
 
-</div>
 <div class="btn-group">
 	<button type="button" class="btn btn-primary"
 		onclick="window.location='@routes.ProjectController.addMeter(project.id)';">
@@ -70,4 +66,4 @@
 		Dashboard
 	</button>
 </div>
-		
+</div>
