@@ -29,23 +29,20 @@ function deleteProject(delUrl){
 }
 
 
-function showHeatMap(meterUrl, meterId) {
-	var meter="#meter-button-";
-	var id=meterId;
-	var buttonId= meter.concat(id);
-	var meter = jsProjectRoutes.controllers.ProjectController.retrieveHeatmapData(meterId);
+function showHeatMap(meterUrl, id) {
+	var as = jsProjectRoutes.controllers.ProjectController.findMeter(id);
 	$.ajax({
-		url: meter.url,
-		dataType: 'json',
-		success: function(data) {
-			console.log(data);
-			createHeatmap();
-		}, 
-		error: function(){
-			
-		}
-	});
+        url: as.url,
+        dataType: 'json',
+        success: function(data) {
+        	window.location = meterUrl;
+        },
+        error: function() {
+          alert("there was an error");
+        }
+      });
 	
-	$('a[href="#heatmap"]').trigger('click');
+	
+	
 }
 

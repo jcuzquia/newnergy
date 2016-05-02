@@ -3,6 +3,19 @@
 
 # --- !Ups
 
+create table daily_data (
+  id                        bigint not null,
+  temperature               double,
+  date                      timestamp,
+  date_value                bigint,
+  day_of_week               integer,
+  day_type                  integer,
+  total_dailyk_wh           float,
+  meter_id                  bigint,
+  constraint ck_daily_data_day_type check (day_type in (0,1,2,3)),
+  constraint pk_daily_data primary key (id))
+;
+
 create table data (
   id                        bigint not null,
   k_wh                      float,
@@ -35,8 +48,22 @@ create table meter (
   project_id                bigint,
   meter_name                varchar(255),
   description               varchar(255),
+  max_kwh                   double,
+  min_kwh                   double,
+  max_kw                    double,
+  min_kw                    double,
+  start_year                integer,
+  end_year                  integer,
+  start_month               integer,
+  end_month                 integer,
+  start_day                 integer,
+  end_day                   integer,
   start_date                timestamp,
   end_date                  timestamp,
+  start_date_value          bigint,
+  end_date_value            bigint,
+  js_start_date             varchar(255),
+  js_end_date               varchar(255),
   constraint pk_meter primary key (id))
 ;
 
@@ -102,6 +129,8 @@ create table users_user_permission (
   user_permission_id             bigint not null,
   constraint pk_users_user_permission primary key (users_id, user_permission_id))
 ;
+create sequence daily_data_seq;
+
 create sequence data_seq;
 
 create sequence linked_account_seq;
@@ -118,16 +147,18 @@ create sequence users_seq;
 
 create sequence user_permission_seq;
 
-alter table data add constraint fk_data_meter_1 foreign key (meter_id) references meter (id) on delete restrict on update restrict;
-create index ix_data_meter_1 on data (meter_id);
-alter table linked_account add constraint fk_linked_account_user_2 foreign key (user_id) references users (id) on delete restrict on update restrict;
-create index ix_linked_account_user_2 on linked_account (user_id);
-alter table meter add constraint fk_meter_project_3 foreign key (project_id) references project (id) on delete restrict on update restrict;
-create index ix_meter_project_3 on meter (project_id);
-alter table project add constraint fk_project_users_4 foreign key (user_id) references users (id) on delete restrict on update restrict;
-create index ix_project_users_4 on project (user_id);
-alter table token_action add constraint fk_token_action_targetUser_5 foreign key (target_user_id) references users (id) on delete restrict on update restrict;
-create index ix_token_action_targetUser_5 on token_action (target_user_id);
+alter table daily_data add constraint fk_daily_data_meter_1 foreign key (meter_id) references meter (id) on delete restrict on update restrict;
+create index ix_daily_data_meter_1 on daily_data (meter_id);
+alter table data add constraint fk_data_meter_2 foreign key (meter_id) references meter (id) on delete restrict on update restrict;
+create index ix_data_meter_2 on data (meter_id);
+alter table linked_account add constraint fk_linked_account_user_3 foreign key (user_id) references users (id) on delete restrict on update restrict;
+create index ix_linked_account_user_3 on linked_account (user_id);
+alter table meter add constraint fk_meter_project_4 foreign key (project_id) references project (id) on delete restrict on update restrict;
+create index ix_meter_project_4 on meter (project_id);
+alter table project add constraint fk_project_users_5 foreign key (user_id) references users (id) on delete restrict on update restrict;
+create index ix_project_users_5 on project (user_id);
+alter table token_action add constraint fk_token_action_targetUser_6 foreign key (target_user_id) references users (id) on delete restrict on update restrict;
+create index ix_token_action_targetUser_6 on token_action (target_user_id);
 
 
 
@@ -146,6 +177,8 @@ alter table users_user_permission add constraint fk_users_user_permission_user_0
 # --- !Downs
 
 SET REFERENTIAL_INTEGRITY FALSE;
+
+drop table if exists daily_data;
 
 drop table if exists data;
 
@@ -170,6 +203,8 @@ drop table if exists users_user_permission;
 drop table if exists user_permission;
 
 SET REFERENTIAL_INTEGRITY TRUE;
+
+drop sequence if exists daily_data_seq;
 
 drop sequence if exists data_seq;
 

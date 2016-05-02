@@ -22,13 +22,13 @@
 							Heatmap
 					</a>
 				</li>
-				<li role="presentation"><a data-toggle="pill" href="#other">Other</a></li>
+				<li role="presentation"><a href='@routes.ProjectController.showDailyTimeSeries(meter.id)'>Other</a></li>
 				<li role="presentation"><a href="#">Messages</a></li>
 			</ul>
 		</div>
 		<div class="col-sm-12 col-sm-offset-2 col-md-12 main col-md-offset-0">
 		 	<div class="tab-content">
-		 		<div class="tab-pane fade in active" id="my-meters" role="tabpanel">
+		 		<div class="tab-pane" id="my-meters" role="tabpanel">
 			 		@meterListPage
 		 		<div id="heatmap" class="tab-pane fade in active col-md-12" role="tabpanel">
 		 			@heatmapGui
@@ -42,8 +42,26 @@
 	</div>
 </div>
 
+@*All the meter information is located here*@
+<pre id="startYear" style="display: none">@meter.startYear</pre>
+<pre id="startMonth" style="display: none">@meter.startMonth</pre>
+<pre id="startDay" style="display: none">@meter.startDay</pre>
+<pre id="endYear" style="display: none">@meter.endYear</pre>
+<pre id="endMonth" style="display: none">@meter.endMonth</pre>
+<pre id="endDay" style="display: none">@meter.endDay</pre>
+<pre id="maxKWh" style="display: none">@meter.maxKWh</pre>
+<pre id="minKWh" style="display: none">@meter.minKWh</pre>
+<pre id="heatmap-data" style="display: none">Date,Time,Temperature
+@if(meter == null){
+	<h1>                 No meter passed</h1>
+}else{@for(dataList <- meter.dataList){@dataList.getDateString,@dataList.getTime,@dataList.getKWh
+}
+}
+
+</pre>
 
 }
+
 
 
 

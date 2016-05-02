@@ -26,18 +26,24 @@ GET		/dashboard/addProject		controllers.ProjectController.addProject()
 POST	/dashboard/saveProject		controllers.ProjectController.saveProject()
 
 # Project
-GET		/projectInfo/:id			controllers.ProjectController.showProject(id: Long)
-DELETE	/project/:id				controllers.ProjectController.deleteProject(id: Long)
-GET		/project/meter/:id			controllers.ProjectController.showMeterHeatMap(id: Long)
-GET		/project/addMeter			controllers.ProjectController.addMeter(projectId: Long)
+GET		/projectInfo/:id/:meterId	controllers.ProjectController.showProject(id: Long, meterId : Long)
+
+
+
+DELETE	/project/:id					controllers.ProjectController.deleteProject(id: Long)
+GET		/project/meter/:id				controllers.ProjectController.showMeterHeatMap(id: Long)
+GET		/project/meter/find/:meterId	controllers.ProjectController.findMeter(meterId: String)
+GET		/project/addMeter				controllers.ProjectController.addMeter(projectId: Long)
 GET		/project/heatmap/:meterId		controllers.ProjectController.retrieveHeatmapData(meterId: Long)
-POST	/project/uploadMeter/:mode				controllers.ProjectController.getMeterData(mode: String, projectId: Long)
-DELETE	/project/deleteMeter/:id	controllers.ProjectController.deleteMeter(id: Long)
+GET		/project/timeSeries/:meterId	controllers.ProjectController.showDailyTimeSeries(meterId: Long)
+POST	/project/uploadMeter/:mode		controllers.ProjectController.getMeterData(mode: String, projectId: Long)
+DELETE	/project/deleteMeter/:id		controllers.ProjectController.deleteMeter(id: Long)
+
 
 # Javascript Routes for AJAX call
-GET		/jsProjectRoutes			controllers.ProjectController.jsProjectRoutes()
+GET		/assests/js/routes		controllers.ProjectController.jsProjectRoutes()
 
-GET		/login						controllers.Application.login()
+GET		/login							controllers.Application.login()
 POST	/login						controllers.Application.doLogin()
 
 GET		/logout						com.feth.play.module.pa.controllers.AuthenticateDI.logout()

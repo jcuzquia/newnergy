@@ -17,7 +17,7 @@
 		<tbody>
 			@for(project <- projectsList){
 				<tr>
-					<td><a href="@routes.ProjectController.showProject(project.id)">@project.title</a></td>
+					<td><a href="@routes.ProjectController.showProject(project.id, 0)">@project.title</a></td>
 					<td>@project.description</td>
 					<td>
 						<button type="button" class="btn-info"

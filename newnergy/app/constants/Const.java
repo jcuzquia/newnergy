@@ -44,6 +44,14 @@ public class Const {
 	public static final BufferedImage HEAT_MAP_IMAGE = getHeatMapImage();
 	
 
+	public enum DayType {
+
+		BUSSINESS_DAY,
+		SUMMER_DAY,
+		WEEKEND,
+		HOLIDAY;
+		
+	}
 
 	private static BufferedImage getHeatMapImage() {
 		

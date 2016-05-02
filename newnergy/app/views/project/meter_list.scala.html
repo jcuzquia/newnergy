@@ -21,8 +21,11 @@
 <table class="table table-striped table-bordered">
 	<thead>
        	<tr>
-			<th>Id</th>
+       		<th>Code</th>
+			<th>Check</th>
 			<th>Description</th>
+			<th>Start Date</th>
+			<th>End Date</th>
 			<th class="col-right">Action</th>
    		</tr>
     </thead>
@@ -30,13 +33,16 @@
 			
 	@for(meter <- project.meters){
 		<tr>
+			<td id="code-@meter.id">@meter.id</td>
 			<td>
 				<button class="btn-success meter-button" id="meter-button-@meter.id" type="button"
-							onclick="showHeatMap('@routes.ProjectController.showMeterHeatMap(meter.id)',@meter.id);">
+							onclick="showHeatMap('@routes.ProjectController.showMeterHeatMap(meter.id)','@meter.id');">
 							 Check Meter @meter.id
 				</button>
 			</td>
-			<td>Some Meter</td>
+			<td>@meter.description</td>
+			<th id="startDate-@meter.id">@meter.startDate.format("dd-MM-yyyy")</th>
+			<th id="endDate-@meter.id">@meter.endDate.format("dd-MM-yyyy")</th>
 			<td class="col-right">
 				<button class="btn-danger" type="button"
 					onclick="deleteMeter('@routes.ProjectController.deleteMeter(meter.id)');"
