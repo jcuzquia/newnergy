@@ -21,6 +21,8 @@ public class Const {
 	public static final String NAV_CONTACT = "contact";
 	public static final String NAV_DASHBOARD = "dashboard";
 	public static final String UPLOADING_METER = "uploading meter";
+	public static final String PROJECT_PAGE = "Project Page";
+	public static final String TIME_SERIES = "Time Series";
 	public static final String METER_HEAT_MAP = "Meter Heat Map";
 	public static final String MY_METERS = "My Meters"; //title My meters passed to the projectPage
 	

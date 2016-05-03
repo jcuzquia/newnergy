@@ -1,4 +1,4 @@
-@(project: Project)(mode: String)(meterListPage: Html)(heatmapGui: Html)(meter : models.Meter = null)
+@(project: Project)(mode: String)(meterListPage: Html)(timeSeriesGui: Html)(meter : models.Meter = null)
 
 @import views.html.commons._ 
 @import views.html.helper._
@@ -22,7 +22,7 @@
 							Heatmap
 					</a>
 				</li>
-				<li role="presentation"><a href='@routes.ProjectController.showDailyTimeSeries(meter.id)'>Other</a></li>
+				<li role="presentation"><a href='@routes.ProjectController.showDailyTimeSeries(meter.id)'>Time Series</a></li>
 				<li role="presentation"><a href="#">Messages</a></li>
 			</ul>
 		</div>
@@ -32,11 +32,11 @@
 			 		@meterListPage
 		 		</div>
 		 		<div id="heatmap" class="tab-pane fade in active col-md-12" role="tabpanel">
-		 			@heatmapGui
-		 		</div>
-		 	
-			 	<div class="tab-pane fade" id="other">
-			 		
+		 		
+		 		</div id="time-series">
+		 			
+			 	<div class="tab-pane fade in active col-md-12" id="other">
+			 		@timeSeriesGui
 			 	</div>
 		 	</div>
 	     </div>
@@ -52,21 +52,27 @@
 <pre id="endDay" style="display: none">@meter.endDay</pre>
 <pre id="maxKWh" style="display: none">@meter.maxKWh</pre>
 <pre id="minKWh" style="display: none">@meter.minKWh</pre>
-<pre id="heatmap-data" style="display: none">Date,Time,Temperature
+@*<pre id="heatmap-data" style="display: none">Date,Time,Temperature
+
 @if(meter == null){
 	<h1>                 No meter passed</h1>
 }else{@for(dataList <- meter.dataList){@dataList.getDateString,@dataList.getTime,@dataList.getKWh
 }
+
+
 }
 
 </pre>
+*@
 
+<pre id="heatmap-data" style="display: none">@for(dailyData <- meter.dailyDataList){
+		@dailyData.getDateValue
+}
+</pre>
 }
 
 
-<pre>@for(dailyData <- meter.dailyDataList){
-		@dailyData.getDateValue
-}</pre>
+
 
 
 

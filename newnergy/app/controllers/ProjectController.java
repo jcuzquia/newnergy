@@ -10,7 +10,6 @@ import com.feth.play.module.pa.user.AuthUser;
 import be.objectify.deadbolt.java.actions.Group;
 import be.objectify.deadbolt.java.actions.Restrict;
 import constants.Const;
-import models.DailyData;
 import models.Data;
 import models.Meter;
 import models.MeterForm;
@@ -26,13 +25,10 @@ import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
 import play.twirl.api.Html;
+import util.HtmlFactory;
 import util.MeterFileReader;
 import views.html.dashboard.project_info;
-import views.html.project.heatmap_gui;
-import views.html.project.heatmap_page;
 import views.html.project.meter_info;
-import views.html.project.meter_list;
-import views.html.project.project_page;
 
 
 /**
@@ -57,21 +53,18 @@ public class ProjectController extends Controller {
 	
 	/**
 	 *  Show project page. This project page has my meter_list html,
-	 *  Has the Charts Page
 	 * @param id of the project
 	 * @return
 	 */
 	@Restrict(@Group(Application.USER_ROLE))
 	public Result showProject(Long projectId, Long meterId){
+		String key = Const.PROJECT_PAGE;
 		Project project = Project.findById(projectId);
 		Meter meter = Meter.findById(meterId);
 		
-		System.out.println("this is the meter being passed: " + meterId);
 		
 		if(project != null){
-			Html meterListPage = meter_list.render(project);
-			Html heatmapGui = heatmap_gui.render("");
-			Html projectPage = project_page.render(project, Const.MY_METERS, meterListPage, heatmapGui, meter);
+			Html projectPage = HtmlFactory.getPage(project, meter, key);
 			return ok(projectPage);
 		} else {
 			return badRequest();
@@ -85,13 +78,12 @@ public class ProjectController extends Controller {
 	 * @return
 	 */
 	public Result showMeterHeatMap(Long meterId){
+		String key = Const.METER_HEAT_MAP;
 		Meter meter = Meter.findById(meterId);
 		Project project = meter.project;
 		if(meterId != null){ //never suppossed to be 0
-			System.out.println("Size ========" + meter.dataList.size());
-			Html meterListPage = meter_list.render(project);
-			Html heatmapGui = heatmap_gui.render("");
-			Html heatMapPage = heatmap_page.render(project, Const.METER_HEAT_MAP, meterListPage, heatmapGui, meter);
+			System.out.println("XXXXXXXXXXXXXXXXXXgenerating heatmap page");
+			Html heatMapPage = HtmlFactory.getPage(project, meter, key);
 			return ok(heatMapPage);
 		} else {
 			return badRequest();
@@ -230,11 +222,15 @@ public class ProjectController extends Controller {
 	 * @param id of Meter
 	 * @return
 	 */
-	public Result showDailyTimeSeries(Long id){
-		Meter meter = Meter.findById(id);
-		List<DailyData> dailyDataList = meter.dailyDataList;
-		System.out.println("this is the size of daily" + dailyDataList.size());
-		return ok(Json.toJson(dailyDataList.size()));
+	public Result showDailyTimeSeries(Long meterId){
+		String key = Const.TIME_SERIES;
+		Meter meter = Meter.findById(meterId);
+		if (meter == null){
+			return badRequest();
+		}
+		Project project = meter.project;
+		Html dailyTimeSeriesPage = HtmlFactory.getPage(project, meter, key);
+		return ok(dailyTimeSeriesPage);
 	}
 	
 	
