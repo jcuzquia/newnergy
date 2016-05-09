@@ -11,6 +11,7 @@ import javax.persistence.ManyToOne;
 
 import com.avaje.ebean.Model;
 
+import constants.Const;
 import javafx.beans.property.StringProperty;
 
 /**
@@ -30,7 +31,7 @@ public class Data extends Model implements Comparable<Data>{
 	private Date date;
 	private long dateValue;
 	private StringProperty meterNumber;
-	private String daytype;
+	private String dayType;
 	
 	@ManyToOne
 	public Meter meter;
@@ -41,13 +42,15 @@ public class Data extends Model implements Comparable<Data>{
 		cal.setTimeInMillis(dateValue);
 		if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY
 				|| cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
-			daytype = "Weekend";
+			dayType = Const.WEEKEND;
 		} else {
-			daytype = "WorkDay";
+			dayType = Const.WORKDAY;
 		}
 		
 		date = new Date(dateValue);
 	}
+	
+	public Data(){}
 	
 	public float getKWh() {
 		return kWh;
@@ -196,12 +199,12 @@ public class Data extends Model implements Comparable<Data>{
 		this.meterNumber = meterNumber;
 	}
 
-	public String getDaytype() {
-		return daytype;
+	public String getDayType() {
+		return dayType;
 	}
 
 	public void setDaytype(String daytype) {
-		this.daytype = daytype;
+		this.dayType = daytype;
 	}
 
 }

@@ -29,20 +29,35 @@ function deleteProject(delUrl){
 }
 
 
-function showHeatMap(meterUrl, id) {
-	var as = jsProjectRoutes.controllers.ProjectController.findMeter(id);
-	$.ajax({
-        url: as.url,
-        dataType: 'json',
-        success: function(data) {
-        	window.location = meterUrl;
-        },
-        error: function() {
-          alert("there was an error");
-        }
-      });
+function activateDayType(dayType, checkboxId){
+	var meterId = document.getElementById("meterId").innerHTML
+	alert(meterId);
+	/* look for all checkboes that have a parent id called 'checkboxlist' attached to it and check if it was checked */
+	$("#daytypecheckboxlist input:checked").each(function() {
+		
+		var dayTypeUrl = jsProjectRoutes.controllers.ProjectController.activateDayType(dayType,meterId);
+		
+		$.ajax({
+			url: dayTypeUrl.url,
+			type: 'POST',
+			success: function(results){
+				location.reload();
+			},
+			error: function() {
+				alert("Error deleting")
+			}
+		});
+	});
 	
+	/* we join the array separated by the comma */
+	var selected;
+	selected = chkArray.join(',') + ",";
 	
+	/* check if there is selected checkboxes, by default the length is 1 as it contains one single comma */
+	if(selected.length > 1){
+		alert("You have selected " + selected);	
+	}else{
+		alert("Please at least one of the checkbox");	
+	}
 	
 }
-

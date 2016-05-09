@@ -8,8 +8,6 @@
 		var endDay = document.getElementById("endDay").innerHTML;
 		var maxKWh = document.getElementById("maxKWh").innerHTML;
 		var minKWh = document.getElementById("minKWh").innerHTML;
-		alert(Date.UTC(2011,8,24));
-		
 		
 	    /**
 	     * This plugin extends Highcharts in two ways:
@@ -81,7 +79,7 @@
 
 
 	    var start;
-	    $('#hc-container').highcharts({
+	    $('#heatmap_container').highcharts({
 
 	        data: {
 	            csv: document.getElementById('heatmap-data').innerHTML,

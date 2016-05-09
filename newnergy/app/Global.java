@@ -11,15 +11,18 @@ import com.feth.play.module.pa.exceptions.AuthException;
 import controllers.routes;
 import models.Project;
 import models.SecurityRole;
+import models.User;
 import play.Application;
 import play.GlobalSettings;
 import play.data.format.Formatters;
 import play.mvc.Call;
+import providers.MyUsernamePasswordAuthProvider.MyLogin;
 
 public class Global extends GlobalSettings {
 
 	@Override
 	public void onStart(Application app) {
+		
 		PlayAuthenticate.setResolver(new Resolver(){
 
 			@Override

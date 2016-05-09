@@ -23,8 +23,12 @@ public class Const {
 	public static final String UPLOADING_METER = "uploading meter";
 	public static final String PROJECT_PAGE = "Project Page";
 	public static final String TIME_SERIES = "Time Series";
-	public static final String METER_HEAT_MAP = "Meter Heat Map";
+	public static final String METER_PAGE = "Meter Page";
 	public static final String MY_METERS = "My Meters"; //title My meters passed to the projectPage
+	
+	// daytypesused for the daily time series
+	public static final String WEEKEND = "Weekend";
+	public static final String WORKDAY = "WorkDay";
 	
 	public static final String KWH = "kWh";
 	

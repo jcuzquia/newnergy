@@ -43,3 +43,12 @@
 	cursor: inherit;
 	display: block;
 }
+
+#jumbotron_hc {
+padding: 5px;	
+}
+
+#time_series_table_div {
+	max-height: 400px;
+	overflow: auto
+}

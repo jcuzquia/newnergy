@@ -1,4 +1,4 @@
-@(project: Project)(mode: String)(meterListPage: Html)(heatmapGui: Html)
+@(project: Project)(mode: String)(meterListPage: Html)
 
 @import views.html.commons._ 
 @import views.html.helper._
@@ -30,10 +30,6 @@
 		 	<div class="tab-content">
 		 		<div class="tab-pane fade in active" id="my-meters" role="tabpanel">
 			 		@meterListPage
-		 		<div id="heatmap" class="tab-pane fade in active col-md-12" role="tabpanel">
-		 			@heatmapGui
-		 		</div>
-		 	
 			 	<div class="tab-pane fade" id="other">
 			 		
 			 	</div>

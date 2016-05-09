@@ -3,19 +3,6 @@
 
 # --- !Ups
 
-create table daily_data (
-  id                        bigint not null,
-  temperature               double,
-  date                      timestamp,
-  date_value                bigint,
-  day_of_week               integer,
-  day_type                  integer,
-  total_dailyk_wh           float,
-  meter_id                  bigint,
-  constraint ck_daily_data_day_type check (day_type in (0,1,2,3)),
-  constraint pk_daily_data primary key (id))
-;
-
 create table data (
   id                        bigint not null,
   k_wh                      float,
@@ -30,9 +17,17 @@ create table data (
   is_end_day                boolean,
   date                      timestamp,
   date_value                bigint,
-  daytype                   varchar(255),
+  day_type                  varchar(255),
   meter_id                  bigint,
   constraint pk_data primary key (id))
+;
+
+create table DayType (
+  id                        bigint not null,
+  day_type                  varchar(255),
+  is_selected               boolean,
+  meter_id                  bigint,
+  constraint pk_DayType primary key (id))
 ;
 
 create table linked_account (
@@ -129,9 +124,9 @@ create table users_user_permission (
   user_permission_id             bigint not null,
   constraint pk_users_user_permission primary key (users_id, user_permission_id))
 ;
-create sequence daily_data_seq;
-
 create sequence data_seq;
+
+create sequence DayType_seq;
 
 create sequence linked_account_seq;
 
@@ -147,10 +142,10 @@ create sequence users_seq;
 
 create sequence user_permission_seq;
 
-alter table daily_data add constraint fk_daily_data_meter_1 foreign key (meter_id) references meter (id) on delete restrict on update restrict;
-create index ix_daily_data_meter_1 on daily_data (meter_id);
-alter table data add constraint fk_data_meter_2 foreign key (meter_id) references meter (id) on delete restrict on update restrict;
-create index ix_data_meter_2 on data (meter_id);
+alter table data add constraint fk_data_meter_1 foreign key (meter_id) references meter (id) on delete restrict on update restrict;
+create index ix_data_meter_1 on data (meter_id);
+alter table DayType add constraint fk_DayType_meter_2 foreign key (meter_id) references meter (id) on delete restrict on update restrict;
+create index ix_DayType_meter_2 on DayType (meter_id);
 alter table linked_account add constraint fk_linked_account_user_3 foreign key (user_id) references users (id) on delete restrict on update restrict;
 create index ix_linked_account_user_3 on linked_account (user_id);
 alter table meter add constraint fk_meter_project_4 foreign key (project_id) references project (id) on delete restrict on update restrict;
@@ -178,9 +173,9 @@ alter table users_user_permission add constraint fk_users_user_permission_user_0
 
 SET REFERENTIAL_INTEGRITY FALSE;
 
-drop table if exists daily_data;
-
 drop table if exists data;
+
+drop table if exists DayType;
 
 drop table if exists linked_account;
 
@@ -204,9 +199,9 @@ drop table if exists user_permission;
 
 SET REFERENTIAL_INTEGRITY TRUE;
 
-drop sequence if exists daily_data_seq;
-
 drop sequence if exists data_seq;
+
+drop sequence if exists DayType_seq;
 
 drop sequence if exists linked_account_seq;
 

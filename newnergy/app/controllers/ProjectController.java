@@ -13,9 +13,9 @@ import constants.Const;
 import models.Data;
 import models.Meter;
 import models.MeterForm;
-import models.MeterInfo;
 import models.Project;
 import models.ProjectForm;
+import models.TimeSeriesData;
 import models.User;
 import play.Routes;
 import play.data.Form;
@@ -77,12 +77,11 @@ public class ProjectController extends Controller {
 	 * @param id of the meter
 	 * @return
 	 */
-	public Result showMeterHeatMap(Long meterId){
-		String key = Const.METER_HEAT_MAP;
+	public Result showMeterPage(Long meterId){
+		String key = Const.METER_PAGE;
 		Meter meter = Meter.findById(meterId);
 		Project project = meter.project;
 		if(meterId != null){ //never suppossed to be 0
-			System.out.println("XXXXXXXXXXXXXXXXXXgenerating heatmap page");
 			Html heatMapPage = HtmlFactory.getPage(project, meter, key);
 			return ok(heatMapPage);
 		} else {
@@ -168,7 +167,6 @@ public class ProjectController extends Controller {
 			File file = filePart.getFile();
 			dataList = MeterFileReader.getDataListFromFile(file);
 			//if data list is not empty then create a meter instance
-			System.out.println("XXXXXXXXXXXXXX" + dataList.size());
 			if(!dataList.isEmpty()){
 				meter.setDataList(dataList);
 				project.addMeter(meter);
@@ -234,16 +232,26 @@ public class ProjectController extends Controller {
 	}
 	
 	
-	public Result findMeter(String id){
-		Long idl = Long.parseLong(id);
-		System.out.println("Finding meter jsRoutes");
-		Meter meter = Meter.findById(idl);
-		MeterInfo meterInfo = new MeterInfo(meter);
+	public Result getTimeSeriesJson(String meterId){
+		Long id = new Long(meterId);
+		Meter meter = Meter.findById(id);
+		List<TimeSeriesData> tsdList = new ArrayList<TimeSeriesData>(meter.getTimeSeriesData()); 
+		List<String> csv= new ArrayList<String>();
+		String firstLine = "Categories";
+		TimeSeriesData f = tsdList.get(0);
 		
-		if(meter == null){
-			return ok("{}");
+		for (Data d: f.getTimeData()){
+			firstLine += "," + d.getDayType();
 		}
-		return ok(Json.toJson(meterInfo));
+		firstLine += "\n";
+		
+		csv.add(firstLine);
+		
+		System.out.println(tsdList.get(0).getMinute());
+		for(TimeSeriesData tsd : tsdList){
+			csv.add(tsd.getCSVString());
+		}
+		return ok(Json.toJson(csv));
 	}
 	
 	/**
@@ -255,9 +263,23 @@ public class ProjectController extends Controller {
 		return ok(
 				Routes.javascriptRouter("jsProjectRoutes", 
 				// Routes
+				routes.javascript.ProjectController.getTimeSeriesJson(),
 				routes.javascript.ProjectController.getMeterData(),
-				routes.javascript.ProjectController.findMeter()));
+				routes.javascript.ProjectController.activateDayType()));
 	}
 	
-	
+	/**
+	 * This is called from the list of daytype checkboxes in the time_series_page
+	 * @param dayType
+	 * @param meterId
+	 * @return
+	 */
+	public Result activateDayType(String dayType, String meterId){
+		System.out.println("Activating dayType: " + dayType + " ...Meter: " +meterId);
+		Long id = new Long(meterId);
+		Meter meter = Meter.findById(id);
+		meter.activateDayType(dayType);
+		meter.update();
+		return redirect(routes.ProjectController.showDailyTimeSeries(id));
+	}
 }

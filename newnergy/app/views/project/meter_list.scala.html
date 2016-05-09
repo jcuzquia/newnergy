@@ -36,7 +36,7 @@
 			<td id="code-@meter.id">@meter.id</td>
 			<td>
 				<button class="btn-success meter-button" id="meter-button-@meter.id" type="button"
-							onclick="showHeatMap('@routes.ProjectController.showMeterHeatMap(meter.id)','@meter.id');">
+							onclick="window.location = '@routes.ProjectController.showMeterPage(meter.id)';">
 							 Check Meter @meter.id
 				</button>
 			</td>
