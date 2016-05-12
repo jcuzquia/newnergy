@@ -35,7 +35,7 @@ function activateDayType(dayType, checkboxId){
 	/* look for all checkboes that have a parent id called 'checkboxlist' attached to it and check if it was checked */
 	$("#daytypecheckboxlist input:checked").each(function() {
 		
-		var dayTypeUrl = jsProjectRoutes.controllers.ProjectController.activateDayType(dayType,meterId);
+		var dayTypeUrl = jsTimeSeriesRoutes.controllers.TimeSeriesController.activateDayType(dayType,meterId);
 		
 		$.ajax({
 			url: dayTypeUrl.url,
@@ -60,4 +60,20 @@ function activateDayType(dayType, checkboxId){
 		alert("Please at least one of the checkbox");	
 	}
 	
+}
+
+function showDailyTimeSeries(meterId) {
+	//alert(meterId);
+	var r = jsTimeSeriesRoutes.controllers.TimeSeriesController.getTimeSeriesJson(meterId);
+	$.ajax({
+		url: r,
+		dataType: 'json',
+		success: function(data) {
+			$("#csv").html(data);
+			loadChart();
+		}, 
+		error: function(){
+			alert("error in time series chart");
+		}
+	});
 }

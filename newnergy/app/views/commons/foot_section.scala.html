@@ -4,9 +4,11 @@
 
 <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("bootstrap.min.js"))'></script>
 
-<script type='text/javascript' src='@routes.Assets.at("bootstrap-datepicker/js/bootstrap-datepicker.js")'></script>
-
 <script type='text/javascript' src='@routes.Assets.at("javascripts/newnergy.js")'></script>
+
+<script type="text/javascript" src='@routes.ProjectController.jsProjectRoutes()' defer="defer"></script>
+
+<script type="text/javascript" src='@routes.TimeSeriesController.jsTimeSeriesRoutes()' defer="defer"></script>
 
 <script type='text/javascript' src='@routes.Application.jsRoutes()' defer="defer"></script>
 
@@ -22,4 +24,3 @@
 
 <script type="text/javascript" src='@routes.Assets.at("javascripts/daily_time_series.js")'></script>
 
-<script type="text/javascript" src='@controllers.routes.ProjectController.jsProjectRoutes()'></script>

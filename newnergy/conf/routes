@@ -12,9 +12,6 @@ GET		/about						controllers.Application.about()
 # Contact
 GET		/contact					controllers.Application.contact()
 
-# Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
-
 # Profile
 GET     /profile                    controllers.Application.profile()
 
@@ -34,15 +31,11 @@ DELETE	/project/:id					controllers.ProjectController.deleteProject(id: Long)
 GET		/project/meter/:meterId				controllers.ProjectController.showMeterPage(meterId: Long)
 GET		/project/addMeter				controllers.ProjectController.addMeter(projectId: Long)
 GET		/project/heatmap/:meterId		controllers.ProjectController.retrieveHeatmapData(meterId: Long)
-GET		/project/timeSeries/:meterId	controllers.ProjectController.showDailyTimeSeries(meterId: Long)
-GET		/project/timeSeriesData/:meterId	controllers.ProjectController.getTimeSeriesJson(meterId: String)
+GET		/project/timeSeries/:meterId	controllers.TimeSeriesController.showTimeSeriesPage(meterId: Long)
+GET		/project/timeSeriesData/:meterId	controllers.TimeSeriesController.getTimeSeriesJson(meterId: String)
 POST	/project/uploadMeter/:mode		controllers.ProjectController.getMeterData(mode: String, projectId: Long)
-POST	/project/activateDayType/:dayType	controllers.ProjectController.activateDayType(dayType: String, meterId: String)
+POST	/project/activateDayType/:dayType	controllers.TimeSeriesController.activateDayType(dayType: String, meterId: String)
 DELETE	/project/deleteMeter/:id		controllers.ProjectController.deleteMeter(id: Long)
-
-
-# Javascript Routes for AJAX call
-GET		/assests/js/routes		controllers.ProjectController.jsProjectRoutes()
 
 # Login
 GET		/login							controllers.Application.login()
@@ -66,7 +59,11 @@ GET		/authenticate/:provider		com.feth.play.module.pa.controllers.AuthenticateDI
 GET		/accounts/unverified			controllers.Signup.unverified()
 GET     /authenticate/:provider/denied     controllers.Signup.oAuthDenied(provider: String)
 
+# Javascript Routes for AJAX call
+GET		/jsTimeSeriesRoutes			controllers.TimeSeriesController.jsTimeSeriesRoutes()
+GET		/jsProjectRoutes		controllers.ProjectController.jsProjectRoutes()
+
 # Map static resources from the /public folder to the /assets URL path
-GET		/assets/*file				controllers.Assets.at(path="/public", file)
-GET		/vassets/*file				controllers.Assets.versioned(path="/public", file:Asset)
+GET		/assets/*file				controllers.Assets.versioned(path="/public", file:Asset)
 GET		/webjars/*file				controllers.WebJarAssets.at(file)
+GET		/assets/*file				controllers.Assets.at(path="/public", file)

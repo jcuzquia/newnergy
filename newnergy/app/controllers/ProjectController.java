@@ -15,11 +15,9 @@ import models.Meter;
 import models.MeterForm;
 import models.Project;
 import models.ProjectForm;
-import models.TimeSeriesData;
 import models.User;
 import play.Routes;
 import play.data.Form;
-import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
@@ -36,6 +34,7 @@ import views.html.project.meter_info;
  * @author Camilo Uzquiano
  *
  */
+@Restrict(@Group(Application.USER_ROLE))
 public class ProjectController extends Controller {
 
 	private static final Form<ProjectForm> PROJECT_FORM = Form.form(ProjectForm.class);
@@ -215,44 +214,7 @@ public class ProjectController extends Controller {
 		return redirect(routes.ProjectController.showProject(project.id, 0));
 	}
 	
-	/**
-	 * Show the daily time series and schedule
-	 * @param id of Meter
-	 * @return
-	 */
-	public Result showDailyTimeSeries(Long meterId){
-		String key = Const.TIME_SERIES;
-		Meter meter = Meter.findById(meterId);
-		if (meter == null){
-			return badRequest();
-		}
-		Project project = meter.project;
-		Html dailyTimeSeriesPage = HtmlFactory.getPage(project, meter, key);
-		return ok(dailyTimeSeriesPage);
-	}
 	
-	
-	public Result getTimeSeriesJson(String meterId){
-		Long id = new Long(meterId);
-		Meter meter = Meter.findById(id);
-		List<TimeSeriesData> tsdList = new ArrayList<TimeSeriesData>(meter.getTimeSeriesData()); 
-		List<String> csv= new ArrayList<String>();
-		String firstLine = "Categories";
-		TimeSeriesData f = tsdList.get(0);
-		
-		for (Data d: f.getTimeData()){
-			firstLine += "," + d.getDayType();
-		}
-		firstLine += "\n";
-		
-		csv.add(firstLine);
-		
-		System.out.println(tsdList.get(0).getMinute());
-		for(TimeSeriesData tsd : tsdList){
-			csv.add(tsd.getCSVString());
-		}
-		return ok(Json.toJson(csv));
-	}
 	
 	/**
 	 * Routes that are called from javascript code in the template
@@ -263,23 +225,7 @@ public class ProjectController extends Controller {
 		return ok(
 				Routes.javascriptRouter("jsProjectRoutes", 
 				// Routes
-				routes.javascript.ProjectController.getTimeSeriesJson(),
-				routes.javascript.ProjectController.getMeterData(),
-				routes.javascript.ProjectController.activateDayType()));
+				routes.javascript.ProjectController.getMeterData()));
 	}
 	
-	/**
-	 * This is called from the list of daytype checkboxes in the time_series_page
-	 * @param dayType
-	 * @param meterId
-	 * @return
-	 */
-	public Result activateDayType(String dayType, String meterId){
-		System.out.println("Activating dayType: " + dayType + " ...Meter: " +meterId);
-		Long id = new Long(meterId);
-		Meter meter = Meter.findById(id);
-		meter.activateDayType(dayType);
-		meter.update();
-		return redirect(routes.ProjectController.showDailyTimeSeries(id));
-	}
 }
